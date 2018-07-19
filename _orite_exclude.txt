@@ -1,0 +1,16 @@
+.git/
+.DS_Store
+.gitignore
+# Cerificates
+certs
+dh.pem
+key.pem
+cert.pem
+migrations
+# Database files
+*.sqlite
+*.sqlite3
+db/data
+# Python cache files
+*.pyc
+__pycache__
