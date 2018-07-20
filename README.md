@@ -5,15 +5,25 @@ The purpose of this package is to synchronise folders and files between a remote
 
 FTP apps like Transmit and Cyberduck can synchronise content, but they are slow.
 
-The CLI tool rsync is brilliant for this purpose in that it is lightning quick. The problem is that there is a lot to type in. There are a lot of flags to remember, as well as the username, IP address, the remote path, and the exclude file path. I also find it hard to remember to include a slash on the local and exclude a slash on the remote path. Meaning one can copy the entire repo into the wrong folder or just loose amoungst your other stuff.
+The CLI tool rsync is brilliant for this purpose in that it is lightning quick. The problem is that there is a lot to type in. There are a lot of flags to remember, as well as the username, IP address, the remote path, and the exclude file path. I also find it hard to remember to include a slash on the local and exclude a slash on the remote path. Meaning one can copy the entire repo into the wrong folder or just loose amongst your other stuff.
 
-## ōrite is a Māori word for ʻthe same’
+I used to do this thing using Git and a Python library called fabric. Running the fabfile would commit, push, login to the remote server and then pull and restart. Whilst it was accurate it was a little clunky and again not super fast. I moved on from that to running a straight shell script. I ended up with variations of this script in each folder I made. 
+
+This project is an effort to centralise that idea, add options, future functionality, and do it using Python.
+
+
+### ōrite is a Māori word for ʻthe same’
 It's pronounced [like this](https://s3.amazonaws.com/media.tewhanake.maori.nz/dictionary/4802.mp3) rather then ‘oh-right’.
 
+***
+
 ## Installation
+I'm working on 
+
     pip install orite
-or just download the orite.py file.
-Add an alias to your bash profile.
+
+In the meantime download the orite.py file and add an alias to your bash profile.
+
     alias orite='python3 path-to-orite/orite.py'
 
 ## How to run?
@@ -22,9 +32,7 @@ Will upload
 	orite -v
 Will download. By default, orite will run in dry-run mode. Use the `-r` flag to override this.
 
-## Note
-I used to do this thing using Git and a Python library called fabric. Running the fabfile would commit, push, login to the remote server and then pull and restart. Whilst it was accurate it was a clunky and again not super fast. I moved on from that to running shell script. I ended up with variations of this script in each folder I made. This is an effort to 
-
+***
 
 ### Improvements
 * Change the settings.py file into a \_orite_config.ini file. This will facilitate writing to config whilst running the app.
