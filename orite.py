@@ -3,7 +3,7 @@ import subprocess, os, sys
 from shutil import copyfile
 
 '''
-orite.py - is an opinionated Python rsync wrapper.
+orite.py - is an opinionated rsync wrapper written in Python.
 
 '''
 
@@ -12,12 +12,6 @@ orite.py - is an opinionated Python rsync wrapper.
 Meaning if this is run from the command line – whatever directory the terminal is in.
 '''
 sys.path.insert(0, os.getcwd())
-
-
-# Could do something like run the sync. If it has trouble connecting it could look for an RSA key.
-# If it exists then copy it to the server.
-# If it doesn't then make one and copy it to the server.
-# Other improvements are in the README.md file.
 
 
 exclude_file_name = "_orite_exclude.txt"
