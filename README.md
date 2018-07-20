@@ -9,7 +9,7 @@ The CLI tool rsync is brilliant for this purpose in that it is lightning quick. 
 
 I used to do this thing using Git and a Python library called fabric. Running the fabfile would commit, push, login to the remote server and then pull and restart. Whilst it was accurate it was a little clunky and again not super fast. I moved on from that to running a straight shell script. I ended up with variations of this script in each folder I made. 
 
-This project is an effort to centralise that idea, add options, future functionality, and do it using Python.
+__*This project is an effort to centralise that idea, add options, future functionality, and do it using Python.*__
 
 
 ### ōrite is a Māori word for ʻthe same’
@@ -29,7 +29,9 @@ In the meantime download the orite.py file and add an alias to your bash profile
 ## How to run?
 	orite -^ 
 Will upload
+
 	orite -v
+
 Will download. By default, orite will run in dry-run mode. Use the `-r` flag to override this.
 
 ***
