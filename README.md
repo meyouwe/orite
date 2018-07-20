@@ -13,7 +13,7 @@ __*This project is an effort to centralise that idea, add options, future functi
 
 
 ### ōrite is a Māori word for ʻthe same’
-It's pronounced [like this](https://s3.amazonaws.com/media.tewhanake.maori.nz/dictionary/4802.mp3) rather then ‘oh-right’.
+It's pronounced [like this](https://s3.amazonaws.com/media.tewhanake.maori.nz/dictionary/4802.mp3) rather than ‘oh-right’.
 
 ***
 
@@ -22,15 +22,22 @@ I'm working on
 
     pip install orite
 
-In the meantime download the orite.py file and add an alias to your bash profile.
+In the meantime download the repo file and add this alias to your bash profile.
 
     alias orite='python3 path-to-orite/orite.py'
 
+
+
 ## How to run?
-	orite -^ 
+Run the following command preferably above the folder you are looking to sync.
+
+    orite -i
+Will initialise two configuration files
+
+    orite -^ 
 Will upload
 
-	orite -v
+    orite -v
 
 Will download. By default, orite will run in dry-run mode. Use the `-r` flag to override this.
 
@@ -47,18 +54,18 @@ Will download. By default, orite will run in dry-run mode. Use the `-r` flag to 
     2. Sync from the remote folder to the copy
     3. run `diff -r -N  <folder_name> _orite_copy__<folder_name>/ --exclude-from <path-to>/_orite_exclude.txt`
 
-    Potentually format the output so that it has better heirarchy and is clearer.
-	From here one could manually copy across the bits they want or possibly do it programmatically. Like:
+    Potentially format the output so that it has a better hierarchy and is clearer.
+    From here one could manually copy across the bits they want or possibly do it programmatically. Like:
 
     $ These are the file/folder/s that differ
     \1. filename 
     \2. filename
     \3. whole_folder_name 
     \4. __all__
-	Which remote file/folder/s  would you like to copy to your local folder? i.e 1 or [2, 3]
+    Which remote file/folder/s  would you like to copy to your local folder? i.e 1 or [2, 3]
 
-* Enable the config file to have multiple servers. For example I use one server to run Django and a different one for Nginx. I don't want two sets of config and exclude files. I want be able to do: `orite -^` which will upload to the default server and `orite -^ css` to the css one.
+* Enable the config file to have multiple servers. For example, I use one server to run Django and a different one for Nginx. I don't want two sets of config and exclude files. I won't be able to do: `orite -^` which will upload to the default server and `orite -^ css` to the CSS one.
 * Investigate a safe mode? --backup flag and the scary delete after flag.
 * The --info=flist flag only works in rysnc that is >= 3.1 Think about how to implement it so that older versions work too.
-* Maybe there should be a rsync command flags option in the default config file. If it exist then the default command is overwritten.
+* Maybe there should be a rsync command flags option in the default config file. If it exists then the default command is overwritten.
 * If it there is trouble connecting orite could look for an RSA key. If it exists then copy it to the server. If it doesn't then make one and copy it to the server.
