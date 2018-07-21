@@ -19,7 +19,7 @@ sys.path.insert(0, os.getcwd())
 
 
 exclude_file_name = "_orite_exclude.txt"
-config_file_name = "_orite_config.ini"
+config_file_name = "orite_config.ini"
 
 
 
@@ -42,32 +42,31 @@ class initialise():
 
 	def initialise_config_file(self):
 		''' Prompt the user and lay down and configuration file.'''
-		file = open(config_file_name, 'w')
-		url = input( "Set your URL: " )
-		file.write("url = '%s'\n" % url)
 
-		current_ip_address = input("Set the remote IP address: ")
-		file.write("remote_server = '%s'\n" % current_ip_address)
+		config = configparser.ConfigParser()
+		c = {}
+		c['url'] = input( "Set your URL: " )
 
-		username = input("Set your username: ")
-		file.write("username = '%s'\n" % username)
+		c['remote_server'] = input("Set the remote IP address: ")
 
-		'''pwd and getcwd() don't escape a space. This escapes that space for use later''' 
+		c['username'] = input("Set your username: ")
+
+		'''pwd and getcwd() doesn't escape spaces and rsync requires spaces to be escaped. This escapes spaces.''' 
 		default_path_to_local_folder = '\ '.join(os.getcwd().split(' '))
 		continue_question = input("Is your local folder: %s  [y/n]" % default_path_to_local_folder)
 		if continue_question.lower() == 'n':
-			path_to_local_folder = input("Set your local folder: ")
+			c['path_to_local_folder'] = input("Set your local folder (escape spaces with a \): ")
 		else:
-			path_to_local_folder = default_path_to_local_folder
-		file.write("path_to_local_folder = '%s'\n" % path_to_local_folder )
+			c['path_to_local_folder'] = default_path_to_local_folder
 		
-		path_to_remote_folder = input("Set your remote folder path: ")
-		file.write("path_to_remote_folder = '%s'\n" % path_to_remote_folder )
+		c['path_to_remote_folder'] = input("Set your remote folder path: ")
 
-		file.close()
+		config['DEFAULT'] = c
+		with open(config_file_name, 'w') as configfile:
+			config.write(configfile)
 
 		sys.stdout.write(
-			format_output("The file orite configuration file '{config_file_name}' has been made.\n".format(
+			format_output("The orite configuration file '{config_file_name}' has been made. Edit it how you like.\n".format(
 				**globals()
 			)
 		))
@@ -92,7 +91,7 @@ class initialise():
 		'''
 		script_dest = os.path.dirname(os.path.realpath(__file__))
 		copyfile(os.path.join(script_dest, exclude_file_name), os.path.join(os.getcwd(), exclude_file_name))
-		sys.stdout.write(format_output("A default exclude file has been made at '%s'\n" % self.exclude_file_name))
+		sys.stdout.write(format_output("A default exclude file has been made at '%s'. Edit it how you like.\n" % self.exclude_file_name))
 
 
 	def exclude_file_exists(self):
@@ -135,14 +134,14 @@ def local_to_remote(dry_run=True):
 
 
 
-def remote_to_local(dry_run=True):
+def remote_to_local(username, remote_server, local_path, remote_path, dry_run=True):
 	'''Sync from the remote server to the local directory'''
 	sys.stdout.write('\nSync the remote folder to the local folder\n')
-	vars = globals()
-	if dry_run:
-		vars['dry_run'] = ' --dry-run'
-	else:
-		vars['dry_run'] = ''
+	# vars = globals()
+	# if dry_run:
+	# 	vars['dry_run'] = ' --dry-run'
+	# else:
+	# 	vars['dry_run'] = ''
 
 	'''Remove the dash from the end'''
 	if vars['path_to_local_folder'][-1] == '/':
@@ -159,17 +158,15 @@ def remote_to_local(dry_run=True):
 
 
 
-def ssh_prompt():
-	'''sftp sync for servers that you can't get ssh access to.'''
-	sys.stdout.write('SSH command:')
-	vars = globals()
-	sys.stdout.write('ssh %s@%s' % ( vars['username'], vars['remote_server']) )
+def ssh_into_remote(username, remote_server, remote_path):
+	'''ssh into the exact path on the remote server using your config file.'''
+	sys.stdout.write(format_output('Running this command: \n'))
+	command = 'ssh {username}@{remote_server} -t "cd {remote_path}; bash --login"'.format(**locals())
+	sys.stdout.write(command + '\n')
+	return subprocess.call(command, shell=True)	
 
 
-try:
-	from _orite_config import *
-except ModuleNotFoundError:
-	pass
+
 
 def main():
 	'''argparse documentation is here: https://docs.python.org/2/library/argparse.html'''
@@ -179,7 +176,7 @@ def main():
 	parser.add_argument("-^", "--from_local_to_remote", help="Sync the local folder to remote folder", action="store_true")
 	parser.add_argument("-d", "--dry_run", help="Do a dry run. This is the default", action="store_true", default='')
 	parser.add_argument("-r", "--for_real", help="Not a dry run, do it for real", action="store_true", default='')
-	parser.add_argument("-ssh", "--ssh_prompt", help="Login using SSH", action="store_true", default='')
+	parser.add_argument("-s", "--ssh", help="Login using SSH", action="store_true", default='')
 	args = parser.parse_args()
 
 	init = initialise()
@@ -188,27 +185,30 @@ def main():
 
 	config = configparser.ConfigParser()
 	config.read(config_file_name)
+
 	try:
 		config = config['DEFAULT']
-		remote_server = config['remote_server']
 		username = config['username']
-		path_to_local_folder = config['path_to_local_folder']
-		path_to_remote_folder = config['path_to_remote_folder']
+		remote_server = config['remote_server']
+		local_path = config['path_to_local_folder']
+		remote_path = config['path_to_remote_folder']
+
+		dry_run = True
+		if args.for_real:
+			dry_run = False
+
+		if args.from_remote_to_local:
+			remote_to_local(username, remote_server, local_path, remote_path, dry_run)
+		elif args.from_local_to_remote:
+			local_to_remote(username, remote_server, local_path, remote_path, dry_run)
+		elif args.ssh:
+			ssh_into_remote(username, remote_server, remote_path)
+
 	except KeyError:
 		sys.stdout.write(format_output('A keyword is missing in your config file\n', '31'))
 		sys.stdout.write('Check the spelling or remove the config file altogther and re-initialise orite.\n')
 
 
-	dry_run = True
-	if args.for_real:
-		dry_run = False
-
-	if args.from_remote_to_local:
-		remote_to_local(dry_run)
-	elif args.from_local_to_remote:
-		local_to_remote(dry_run)
-	elif args.ssh_prompt:
-		ssh_prompt()
 
 
 if __name__ == '__main__':
