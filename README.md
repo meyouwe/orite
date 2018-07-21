@@ -1,7 +1,7 @@
 # orite 
 ### An opinionated rsync wrapper written in Python
 
-The purpose of this package is to synchronise folders and files between a remote and local server.
+The purpose of orite is to synchronise folders and files between a remote and local server.
 
 FTP apps like Transmit and Cyberduck can synchronise content, but they are slow.
 
@@ -9,7 +9,7 @@ The CLI tool rsync is brilliant for this purpose in that it is lightning quick. 
 
 I used to do this thing using Git and a Python library called fabric. Running the fabfile would commit, push, login to the remote server and then pull and restart. Whilst it was accurate it was a little clunky and again not super fast. I moved on from that to running a straight shell script. I ended up with variations of this script in each folder I made. 
 
-__*This project is an effort to centralise that idea, add options, future functionality, and do it using Python.*__
+__*This project is an effort to centralise a sync approach, add options, future functionality, and do it using Python.*__
 
 
 ### ōrite is a Māori word for ʻthe same’
@@ -22,14 +22,14 @@ I'm working on
 
     pip install orite
 
-In the meantime download the repo file and add this alias to your bash profile.
+In the meantime download the orite.py file and add an alias to your bash profile.
 
-    alias orite='python3 path-to-orite/orite.py'
+    alias orite='python3 path-to-orite-folder/orite.py'
 
-
+You will also need to download the `_orite_exclude.txt` and put it in the same location as orite.py.
 
 ## How to run?
-Run the following command preferably above the folder you are looking to sync.
+Run the following command preferably above the folder you are looking to copy.
 
     orite -i
 Will initialise two configuration files
