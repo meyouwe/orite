@@ -18,23 +18,23 @@ It's pronounced [like this](https://s3.amazonaws.com/media.tewhanake.maori.nz/di
 ***
 
 ## Installation
-I'm working on 
 
     pip install orite
 
-In the meantime download the orite.py file and add an alias to your bash profile.
+Or download the orite folder and alias orite.py in your bash profile.
 
     alias orite='python3 path-to-orite-folder/orite.py'
 
-You will also need to download the `_orite_exclude.txt` and put it in the same location as orite.py.
 
 ## How to run?
 Run the following command preferably above the folder you are looking to copy.
 
     orite -i
+
 Will initialise two configuration files
 
     orite -^ 
+
 Will upload
 
     orite -v
@@ -44,7 +44,6 @@ Will download. By default, orite will run in dry-run mode. Use the `-r` flag to 
 ***
 
 ### Improvements
-* Change the settings.py file into a \_orite_config.ini file. This will facilitate writing to config whilst running the app.
 * How does this directory differ from the remote one?
     Whilst we can run rsync with the dry run flag the feedback you get is unsatisfactory. rsync will tell you that files differ, but if you want to know exactly what the difference is, which lines, for example, you are out of luck.
 

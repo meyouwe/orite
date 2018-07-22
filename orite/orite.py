@@ -18,7 +18,7 @@ Meaning if this is run from the command line - whatever directory the terminal i
 sys.path.insert(0, os.getcwd())
 
 
-exclude_file_name = "_orite_exclude.txt"
+exclude_file_name = "orite_exclude.txt"
 config_file_name = "orite_config.ini"
 
 
@@ -90,7 +90,7 @@ class initialise():
 		I have seen .gitignore used as an exclude file. This is an interesting idea but not there will be differences between these two.
 		'''
 		script_dest = os.path.dirname(os.path.realpath(__file__))
-		copyfile(os.path.join(script_dest, exclude_file_name), os.path.join(os.getcwd(), exclude_file_name))
+		copyfile(os.path.join(script_dest, self.exclude_file_name), os.path.join(os.getcwd(), self.exclude_file_name))
 		sys.stdout.write(format_output("A default exclude file has been made at '%s'. Edit it how you like.\n" % self.exclude_file_name))
 
 
@@ -123,7 +123,6 @@ class commands():
 	def local_to_remote(self):
 		'''Sync from the local path to the remote server'''
 		sys.stdout.write('\nSync the local folder to the remote folder\n')
-		vars = globals()
 
 		'''Add the dash to the end. The reason for this can be found on this page: https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories-on-a-vps'''
 		if self.local_path[-1] != '/':
@@ -173,7 +172,7 @@ class commands():
 def main():
 	'''argparse documentation is here: https://docs.python.org/2/library/argparse.html'''
 	parser = argparse.ArgumentParser(prog='Snyc', description='A wrapper for rsync with configuration files')
-	parser.add_argument("-i", "--init", help="Initialise the config and exclude files")
+	# parser.add_argument("-i", "--init", help="Initialise the config and exclude files", action="store_true")
 	parser.add_argument("-v", "--from_remote_to_local", help="Sync the remote folder to the local folder", action="store_true")
 	parser.add_argument("-^", "--from_local_to_remote", help="Sync the local folder to remote folder", action="store_true")
 	parser.add_argument("-d", "--dry_run", help="Do a dry run. This is the default", action="store_true", default='')
