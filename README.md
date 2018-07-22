@@ -29,7 +29,7 @@ Or download the orite folder and alias orite.py in your bash profile.
 ## How to run?
 Run the following command preferably above the folder you are looking to copy.
 
-    orite -i
+    orite
 
 Will initialise two configuration files
 
