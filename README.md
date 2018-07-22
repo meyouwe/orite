@@ -27,11 +27,11 @@ Or download the orite folder and alias orite.py in your bash profile.
 
 
 ## How to run?
-Run the following command preferably above the folder you are looking to copy.
+Running the following for the first time, preferably above the folder you are looking to sync, will make a config file and a default exclude file.
 
     orite
 
-Will initialise two configuration files
+Then
 
     orite -^ 
 
