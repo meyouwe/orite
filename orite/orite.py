@@ -105,65 +105,67 @@ class initialise():
 
 
 
-def local_to_remote(dry_run=True):
-	'''Sync from the local path to the remote server'''
-	sys.stdout.write('\nSync the local folder to the remote folder\n')
-	vars = globals()
-	if dry_run:
-		vars['dry_run'] = ' --dry-run'
-	else:
-		vars['dry_run'] = ''
+class commands():
 
-	'''Add the dash to the end. The reason for this can be found on this page: https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories-on-a-vps'''
-	if vars['path_to_local_folder'][-1] != '/':
-		vars['path_to_local_folder'] = vars['path_to_local_folder'] + '/'
-	'''Remove the dash from the end'''
-	if vars['path_to_remote_folder'][-1] == '/':
-		vars['path_to_remote_folder'] = vars['path_to_remote_folder'][:-1]
+	def __init__(self, username, remote_server, local_path, remote_path, dry_run):
+		self.username = username
+		self.remote_server = remote_server
+		self.local_path = local_path
+		self.remote_path = remote_path
+		self.exclude_file_name = exclude_file_name
 
-	'''Ensire that rsync is >= 3.1 for the --info=flist flag to work.
-	Mac contains a version from 2006.
-	This can be updated and documentation can be found here: https://f-a.nz/dev/update-macos-rsync-with-homebrew/
-	'''
-	command = 'rsync --human-readable --info=flist --stats --archive --verbose --partial -ic --progress{dry_run} {path_to_local_folder} {username}@{remote_server}:{path_to_remote_folder} --exclude-from="{exclude_file_name}"'.format(**vars)
-	# Option for rsync <3.1
-	# command = 'rsync --human-readable --stats --archive --verbose --partial --progress{dry_run} {path_to_local_folder} {username}@{remote_server}:{path_to_remote_folder} --exclude-from="sync_exclude.txt"'.format(**vars)
-	sys.stdout.write(format_output('\nRunning this command: \n') + command + '\n\n')
-	return subprocess.call(command, shell=True)
+		if dry_run:
+			self.dry_run = ' --dry-run'
+		else:
+			self.dry_run = ''
 
 
+	def local_to_remote(self):
+		'''Sync from the local path to the remote server'''
+		sys.stdout.write('\nSync the local folder to the remote folder\n')
+		vars = globals()
+
+		'''Add the dash to the end. The reason for this can be found on this page: https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories-on-a-vps'''
+		if self.local_path[-1] != '/':
+			self.local_path = self.local_path + '/'
+		'''Remove the dash from the end'''
+		if self.remote_path[-1] == '/':
+			self.remote_path = self.remote_path[:-1]
+
+		'''Ensure that rsync is >= 3.1 for the --info=flist flag to work.
+		Mac contains a version from 2006.
+		This can be updated and documentation can be found here: https://f-a.nz/dev/update-macos-rsync-with-homebrew/
+		'''
+		command = 'rsync --human-readable --info=flist --stats --archive --verbose --partial -ic --progress{o.dry_run} {o.local_path} {o.username}@{o.remote_server}:{o.remote_path} --exclude-from="{o.exclude_file_name}"'.format(o=self)
+		# Option for rsync <3.1
+		# command = 'rsync --human-readable --stats --archive --verbose --partial --progress{o.dry_run} {o.local_path} {o.username}@{o.remote_server}:{o.remote_path} --exclude-from="{o.exclude_file_name}"'.format(o=self)
+		sys.stdout.write(format_output('\nRunning this command: \n') + command + '\n\n')
+		return subprocess.call(command, shell=True)
 
 
-def remote_to_local(username, remote_server, local_path, remote_path, dry_run=True):
-	'''Sync from the remote server to the local directory'''
-	sys.stdout.write('\nSync the remote folder to the local folder\n')
-	# vars = globals()
-	# if dry_run:
-	# 	vars['dry_run'] = ' --dry-run'
-	# else:
-	# 	vars['dry_run'] = ''
+	def remote_to_local(self):
+		'''Sync from the remote server to the local directory'''
+		sys.stdout.write('\nSync the remote folder to the local folder\n')
 
-	'''Remove the dash from the end'''
-	if vars['path_to_local_folder'][-1] == '/':
-		vars['path_to_local_folder'] = vars['path_to_local_folder'][:-1]
-	'''Add the dash to the end'''
-	if vars['path_to_remote_folder'][-1] != '/':
-		vars['path_to_remote_folder'] = vars['path_to_remote_folder'] + '/'
+		'''Remove the dash from the end'''
+		if self.local_path[-1] == '/':
+			self.local_path = self.local_path[:-1]
+		'''Add the dash to the end'''
+		if self.remote_path[-1] != '/':
+			self.remote_path = self.remote_path + '/'
 
-	'''--info=flist flag only works in rysnc that is >= 3.1 Read comment in local_to_remote()'''
-	command = 'rsync --human-readable --info=flist --stats --archive --verbose --partial --progress{dry_run} {username}@{remote_server}:{path_to_remote_folder} {path_to_local_folder} --exclude-from="{exclude_file_name}"'.format(**vars)
-	sys.stdout.write(format_output('\nRunning this command: \n') + command + '\n\n')
-	return subprocess.call(command, shell=True)
+		'''--info=flist flag only works in rysnc that is >= 3.1 Read comment in local_to_remote()'''
+		command = 'rsync --human-readable --info=flist --stats --archive --verbose --partial --progress{o.dry_run} {o.username}@{o.remote_server}:{o.remote_path} {o.local_path} --exclude-from="{o.exclude_file_name}"'.format(o=self)
+		sys.stdout.write(format_output('\nRunning this command: \n') + command + '\n\n')
+		return subprocess.call(command, shell=True)
 
 
-
-
-def ssh_into_remote(username, remote_server, remote_path):
-	'''ssh into the exact path on the remote server using your config file.'''
-	sys.stdout.write(format_output('Running this command: \n'))
-	command = 'ssh {username}@{remote_server} -t "cd {remote_path}; bash --login"'.format(**locals())
-	sys.stdout.write(command + '\n')
-	return subprocess.call(command, shell=True)	
+	def ssh_into_remote(self):
+		'''ssh into the exact path on the remote server using your config file.'''
+		sys.stdout.write(format_output('Running this command: \n'))
+		command = 'ssh {o.username}@{o.remote_server} -t "cd {o.remote_path}; bash --login"'.format(o=self)
+		sys.stdout.write(command + '\n')
+		return subprocess.call(command, shell=True)	
 
 
 
@@ -183,6 +185,11 @@ def main():
 	init.config_file_exists()
 	init.exclude_file_exists()
 
+	if args.for_real:
+		dry_run = False
+	else:
+		dry_run = True
+
 	config = configparser.ConfigParser()
 	config.read(config_file_name)
 
@@ -192,21 +199,21 @@ def main():
 		remote_server = config['remote_server']
 		local_path = config['path_to_local_folder']
 		remote_path = config['path_to_remote_folder']
-
-		dry_run = True
-		if args.for_real:
-			dry_run = False
-
-		if args.from_remote_to_local:
-			remote_to_local(username, remote_server, local_path, remote_path, dry_run)
-		elif args.from_local_to_remote:
-			local_to_remote(username, remote_server, local_path, remote_path, dry_run)
-		elif args.ssh:
-			ssh_into_remote(username, remote_server, remote_path)
+		
+		com = commands(username, remote_server, local_path, remote_path, dry_run)
 
 	except KeyError:
 		sys.stdout.write(format_output('A keyword is missing in your config file\n', '31'))
 		sys.stdout.write('Check the spelling or remove the config file altogther and re-initialise orite.\n')
+		sys.exit()
+
+
+	if args.from_remote_to_local:
+		com.remote_to_local()
+	elif args.from_local_to_remote:
+		com.local_to_remote()
+	elif args.ssh:
+		com.ssh_into_remote()
 
 
 
