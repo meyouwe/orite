@@ -1,5 +1,5 @@
 # orite 
-### An opinionated rsync wrapper written in Python
+## An opinionated rsync wrapper written in Python
 
 The purpose of orite is to synchronise folders and files between a remote and local server.
 
@@ -13,13 +13,12 @@ To do this using rsync run:
 
 This project is an effort to centralise a sync approach, configure once, add options, and make it simple.
 
-
-### ōrite is a Māori word for ʻthe same’
+#### ōrite is a Māori word for ʻthe same’
 It's pronounced [like this](https://s3.amazonaws.com/media.tewhanake.maori.nz/dictionary/4802.mp3) rather than ‘oh-right’.
 
 ***
 
-### The problem
+## The problem
 
 FTP apps like Transmit and Cyberduck can synchronise content, but they are slow.
 
