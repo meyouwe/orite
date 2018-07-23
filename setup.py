@@ -25,3 +25,8 @@ setuptools.setup(
         "Topic :: Internet"
     ),
 )
+
+# Build with
+# $ python setup.py sdist bdist_wheel
+# Upload to the Pypi with twine
+# $ twine upload dist/*
