@@ -61,6 +61,7 @@ The help menu can be seen using
 ***
 
 ### Improvements
+* Tests
 * How does this directory differ from the remote one?
     Whilst we can run rsync with the dry run flag the feedback you get is unsatisfactory. rsync will tell you that files differ, but if you want to know exactly what the difference is, which lines, for example, you are out of luck.
 
