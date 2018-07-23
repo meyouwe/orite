@@ -121,7 +121,11 @@ class commands():
 		else:
 			self.dry_run = ''
 
-		self.local_folder = os.path.basename(self.local_path)
+		if self.local_path[-1] == '/':
+			local_path = self.local_path[:-1]
+		else:
+			local_path = self.local_path
+		self.local_folder = os.path.basename(local_path)
 		self.local_folder_copy_name = 'orite__%s' % self.local_folder
 
 
@@ -168,8 +172,8 @@ class commands():
 
 
 	def copy_local(self):
-		if not os.path.isdir(self.local_folder_copy):
-			command = 'cp -r {o.local_path} {local_folder_copy}'.format(o=self)
+		if not os.path.isdir(self.local_folder_copy_name):
+			command = 'cp -r {o.local_path} {o.local_folder_copy_name}'.format(o=self)
 			subprocess.call(command, shell=True)
 
 
@@ -259,6 +263,8 @@ def main():
 		com.sync_remote_copy()
 	elif args.diff:
 		com.compare_local_to_remote_copy()
+
+
 
 
 if __name__ == '__main__':

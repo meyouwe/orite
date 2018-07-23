@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="orite",
-    version="0.0.14",
+    version="0.0.15",
     author="Maarten Idema",
     author_email="maarten@mountdeluxe.com",
     description="orite - an opinionated Python rsync wrapper",
@@ -27,6 +27,6 @@ setuptools.setup(
 )
 
 # Build with
-# $ python setup.py sdist bdist_wheel
+# $ python3 setup.py sdist bdist_wheel
 # Upload to the Pypi with twine
 # $ twine upload dist/*
