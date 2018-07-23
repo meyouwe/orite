@@ -7,7 +7,9 @@ For a detailed write-up visit: https://github.com/meyouwe/orite
 '''
 
 from shutil import copyfile
-import subprocess, os, sys
+import subprocess
+import os
+import sys
 import argparse
 import configparser
 
@@ -159,6 +161,14 @@ class commands():
 		return subprocess.call(command, shell=True)
 
 
+	def copy_local(self):
+		folder_name = os.path.basename(self.local_path)
+		name_of_copy_folder = 'orite__%s' % folder_name
+		if not os.path.isdir(name_of_copy_folder):
+			command = 'cp -r {o.local_path} {name_of_copy_folder}'.format(o=self, **locals())
+			subprocess.call(command, shell=True)
+
+
 	def ssh_into_remote(self):
 		'''ssh into the exact path on the remote server using your config file.'''
 		sys.stdout.write(format_output('Running this command: \n'))
@@ -181,12 +191,13 @@ def main():
 	'''argparse documentation is here: https://docs.python.org/2/library/argparse.html'''
 	parser = argparse.ArgumentParser(prog='Snyc', description='A wrapper for rsync with configuration files')
 	# parser.add_argument("-i", "--init", help="Initialise the config and exclude files", action="store_true")
-	parser.add_argument("-v", "--from_remote_to_local", help="Sync the remote folder to the local folder", action="store_true")
-	parser.add_argument("-^", "--from_local_to_remote", help="Sync the local folder to remote folder", action="store_true")
+	parser.add_argument("-v", "--remote_to_local", help="Sync the remote folder to the local folder", action="store_true")
+	parser.add_argument("-^", "--local_to_remote", help="Sync the local folder to remote folder", action="store_true")
 	parser.add_argument("-d", "--dry_run", help="Do a dry run. This is the default", action="store_true", default='')
 	parser.add_argument("-r", "--for_real", help="Not a dry run, do it for real", action="store_true", default='')
 	parser.add_argument("-s", "--ssh", help="Login using SSH", action="store_true", default='')
 	parser.add_argument("--sftp", help="Login using SFTP", action="store_true", default='')
+	parser.add_argument('-c', "--copy", help="temp", action="store_true", default='')
 	args = parser.parse_args()
 
 	init = initialise()
@@ -216,14 +227,16 @@ def main():
 		sys.exit()
 
 
-	if args.from_remote_to_local:
+	if args.remote_to_local:
 		com.remote_to_local()
-	elif args.from_local_to_remote:
+	elif args.local_to_remote:
 		com.local_to_remote()
 	elif args.ssh:
 		com.ssh_into_remote()
 	elif args.sftp:
 		com.sftp_into_remote()
+	elif args.copy:
+		com.copy_local()
 
 
 
