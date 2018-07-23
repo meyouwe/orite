@@ -164,7 +164,15 @@ class commands():
 		sys.stdout.write(format_output('Running this command: \n'))
 		command = 'ssh {o.username}@{o.remote_server} -t "cd {o.remote_path}; bash --login"'.format(o=self)
 		sys.stdout.write(command + '\n')
-		return subprocess.call(command, shell=True)	
+		return subprocess.call(command, shell=True)
+
+
+	def sftp_into_remote(self):
+		'''sftp into the exact path on the remote server using your config file.'''
+		sys.stdout.write(format_output('Running this command: \n'))
+		command = 'sftp {o.username}@{o.remote_server}:{o.remote_path}'.format(o=self)
+		sys.stdout.write(command + '\n')
+		return subprocess.call(command, shell=True)
 
 
 
@@ -178,6 +186,7 @@ def main():
 	parser.add_argument("-d", "--dry_run", help="Do a dry run. This is the default", action="store_true", default='')
 	parser.add_argument("-r", "--for_real", help="Not a dry run, do it for real", action="store_true", default='')
 	parser.add_argument("-s", "--ssh", help="Login using SSH", action="store_true", default='')
+	parser.add_argument("--sftp", help="Login using SFTP", action="store_true", default='')
 	args = parser.parse_args()
 
 	init = initialise()
@@ -213,6 +222,8 @@ def main():
 		com.local_to_remote()
 	elif args.ssh:
 		com.ssh_into_remote()
+	elif args.sftp:
+		com.sftp_into_remote()
 
 
 
