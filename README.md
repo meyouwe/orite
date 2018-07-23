@@ -62,26 +62,10 @@ The help menu can be seen using
 
 ### Improvements
 * Tests
-* How does this directory differ from the remote one?
-    Whilst we can run rsync with the dry run flag the feedback you get is unsatisfactory. rsync will tell you that files differ, but if you want to know exactly what the difference is, which lines, for example, you are out of luck.
-
-    diff is great with this kind of thing, but getting diff to run over a network is slow.
-
-    1. So the suggested solution is to make a copy of the local folder to `_orite_copy__<folder_name>`
-    2. Sync from the remote folder to the copy
-    3. run `diff -r -N  <folder_name> orite_copy__<folder_name>/ --exclude-from <path-to>/orite_exclude.txt`
-
-    Potentially format the output so that it has a better hierarchy and is clearer.
-    From here one could manually copy across the bits they want or possibly do it programmatically. <!--Like:
-
-    $ These are the file/folder/s that differ
-    1. filename 
-    2. filename
-    3. whole_folder_name 
-    4. __all__
-    Which remote file/folder/s  would you like to copy to your local folder? i.e 1 or [2, 3] -->
-
 * Enable the config file to have multiple servers. For example, if you use one server to run Django and another one to run Nginx. I don't want two sets of config and exclude files. I won't be able to do: `orite -^` which will upload to the default server and `orite -^ css` to the CSS one.
+* Expand upon the diff feature
+    * Potentially format the output so that it is easier to comprehend. 
+    * From here one could manually copy across the bits they want or possibly do it programmatically. Choose from a numbered list? Which remote file/folder/s  would you like to copy to your local folder? i.e 1 or [2, 3] 
 * Combine config and exclude files together.
 * Investigate a safe mode? --backup flag and the scary delete after flag.
 * The --info=flist flag only works in rysnc that is >= 3.1 Think about how to implement it so that older versions work too.

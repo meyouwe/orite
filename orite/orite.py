@@ -36,7 +36,7 @@ def format_output(message, colour='34'):
 
 
 class initialise():
-	'''This class has methods that check to see if the config file and exclude file is in the path where the script is running from. If they aren't then there two methods the can initialise these files.'''
+	'''This class has methods that check to see if the config file and exclude file is in the path where the script is running from. If they aren't then there are two methods that will initialise these files.'''
 	def __init__(self):
 		self.config_file_name = config_file_name
 		self.exclude_file_name = exclude_file_name
@@ -121,6 +121,9 @@ class commands():
 		else:
 			self.dry_run = ''
 
+		self.local_folder = os.path.basename(self.local_path)
+		self.local_folder_copy_name = 'orite__%s' % self.local_folder
+
 
 	def local_to_remote(self):
 		'''Sync from the local path to the remote server'''
@@ -144,29 +147,42 @@ class commands():
 		return subprocess.call(command, shell=True)
 
 
-	def remote_to_local(self):
+	def remote_to_local(self, local_path=False):
 		'''Sync from the remote server to the local directory'''
 		sys.stdout.write('\nSync the remote folder to the local folder\n')
 
+		if not local_path:
+			local_path = self.local_path
+
 		'''Remove the dash from the end'''
-		if self.local_path[-1] == '/':
-			self.local_path = self.local_path[:-1]
+		if local_path[-1] == '/':
+			local_path = local_path[:-1]
 		'''Add the dash to the end'''
 		if self.remote_path[-1] != '/':
 			self.remote_path = self.remote_path + '/'
 
 		'''--info=flist flag only works in rysnc that is >= 3.1 Read comment in local_to_remote()'''
-		command = 'rsync --human-readable --info=flist --stats --archive --verbose --partial --progress{o.dry_run} {o.username}@{o.remote_server}:{o.remote_path} {o.local_path} --exclude-from="{o.exclude_file_name}"'.format(o=self)
+		command = 'rsync --human-readable --info=flist --stats --archive --verbose --partial --progress{o.dry_run} {o.username}@{o.remote_server}:{o.remote_path} {local_path} --exclude-from="{o.exclude_file_name}"'.format(o=self, **locals())
 		sys.stdout.write(format_output('\nRunning this command: \n') + command + '\n\n')
 		return subprocess.call(command, shell=True)
 
 
 	def copy_local(self):
-		folder_name = os.path.basename(self.local_path)
-		name_of_copy_folder = 'orite__%s' % folder_name
-		if not os.path.isdir(name_of_copy_folder):
-			command = 'cp -r {o.local_path} {name_of_copy_folder}'.format(o=self, **locals())
+		if not os.path.isdir(self.local_folder_copy):
+			command = 'cp -r {o.local_path} {local_folder_copy}'.format(o=self)
 			subprocess.call(command, shell=True)
+
+
+	def sync_remote_copy(self):
+		local_copy_folder_path = os.getcwd() + '/' + self.local_folder_copy_name
+		self.remote_to_local(local_path=local_copy_folder_path)
+
+
+	def compare_local_to_remote_copy(self):
+		'''Compare the local folder to the local remote copy.'''
+		command = 'diff -r -N  {o.local_path} {o.local_folder_copy_name}/ --exclude-from {o.exclude_file_name}'.format(o=self, **locals())
+		sys.stdout.write(format_output('\nRunning this command: \n') + command + '\n\n')
+		return subprocess.call(command, shell=True)
 
 
 	def ssh_into_remote(self):
@@ -188,16 +204,18 @@ class commands():
 
 
 def main():
-	'''argparse documentation is here: https://docs.python.org/2/library/argparse.html'''
-	parser = argparse.ArgumentParser(prog='Snyc', description='A wrapper for rsync with configuration files')
-	# parser.add_argument("-i", "--init", help="Initialise the config and exclude files", action="store_true")
+	'''FYI argparse documentation is here: https://docs.python.org/2/library/argparse.html'''
+	parser = argparse.ArgumentParser(prog='Snyc', description='A Python wrapper mainly around rsync with configuration files.')
 	parser.add_argument("-v", "--remote_to_local", help="Sync the remote folder to the local folder", action="store_true")
 	parser.add_argument("-^", "--local_to_remote", help="Sync the local folder to remote folder", action="store_true")
 	parser.add_argument("-d", "--dry_run", help="Do a dry run. This is the default", action="store_true", default='')
 	parser.add_argument("-r", "--for_real", help="Not a dry run, do it for real", action="store_true", default='')
 	parser.add_argument("-s", "--ssh", help="Login using SSH", action="store_true", default='')
 	parser.add_argument("--sftp", help="Login using SFTP", action="store_true", default='')
-	parser.add_argument('-c', "--copy", help="temp", action="store_true", default='')
+
+	parser.add_argument("-C", "--initial_copy", help="Copy the local folder for use in diff.", action="store_true", default='')
+	parser.add_argument('-R', "--remote_to_remote_copy", help="Sync the remote folder to the local remote copy", action="store_true", default='')
+	parser.add_argument('-D', "--diff", help="Compare the local folder to the local remote copy", action="store_true", default='')
 	args = parser.parse_args()
 
 	init = initialise()
@@ -235,10 +253,12 @@ def main():
 		com.ssh_into_remote()
 	elif args.sftp:
 		com.sftp_into_remote()
-	elif args.copy:
+	elif args.initial_copy:
 		com.copy_local()
-
-
+	elif args.remote_to_remote_copy:
+		com.sync_remote_copy()
+	elif args.diff:
+		com.compare_local_to_remote_copy()
 
 
 if __name__ == '__main__':
