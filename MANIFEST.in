@@ -1,2 +1,2 @@
 include README.md
-include orite/_orite_exclude.txt
+include orite/orite_exclude.txt

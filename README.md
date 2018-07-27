@@ -32,7 +32,7 @@ This is where orite came in.
 
 ## Installation
 
-    pip install orite
+    pip3 install orite
 
 Or download the orite folder and alias orite.py in your bash profile.
 
