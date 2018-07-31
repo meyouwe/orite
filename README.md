@@ -38,6 +38,10 @@ Or download the orite folder and alias orite.py in your bash profile.
 
     alias orite='python3 path-to-orite-folder/orite.py'
 
+Update with
+
+	pip3 install orite --upgrade --no-cache-dir
+
 
 ## How to run?
 Run orite in the directory above the folder that you would like to sync.
