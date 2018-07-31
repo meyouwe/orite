@@ -68,11 +68,14 @@ The help menu can be seen using
 You can enable the config file to have more than one server or folder location. For example, my DEFAULT folder is my Django install and in a very separate location is my CSS folder. 
 
 `orite -^` will upload (with --dry-run set) to my DEFAULT setting, and 
+
 `orite CSS -^` will upload to my CSS section settings. 
 
 Open the config file in your text editor. Add a section label at the bottom like so
+
 `[CSS]`
-Then add the `path_to_local_folder = /path/` on the next line and `path_to_remote_folder = /path/` to the next. If your CSS settings are on the same server then you don't need to add those details again. Needless to say that if they are on a different server than add those different settings to this section too.
+
+Then add the `path_to_local_folder = /path/` on the next line and `path_to_remote_folder = /path/` to the line after. If your CSS settings are on the same server then you don't need to add those details again. Needless to say that if they are on a different server than add those settings to this section too.
 
 Add as many sections as you like.
 
