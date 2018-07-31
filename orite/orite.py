@@ -269,9 +269,9 @@ def main():
 	elif args.diff:
 		com.compare_local_to_remote_copy()
 
-	# Doesn't work.
-	else:
-		sys.stdout.write(format_output('Use orite -h to see which options are available\n'))
+	# # Doesn't work.
+	# else:
+	# 	sys.stdout.write(format_output('Use orite -h to see which options are available\n'))
 
 
 
