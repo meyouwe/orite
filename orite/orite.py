@@ -178,7 +178,12 @@ class commands():
 
 
 	def sync_remote_copy(self):
-		local_copy_folder_path = os.getcwd() + '/' + self.local_folder_copy_name
+		local_copy_folder_path = '\ '.join(os.getcwd().split(' '))
+		if local_copy_folder_path[-1] == '/':
+			local_copy_folder_path = local_copy_folder_path + self.local_folder_copy_name
+		else:
+			local_copy_folder_path = local_copy_folder_path + '/' + self.local_folder_copy_name
+			# local_copy_folder_path = '\ '.join(os.getcwd().split(' ')) + '/' + self.local_folder_copy_name
 		self.remote_to_local(local_path=local_copy_folder_path)
 
 
@@ -264,6 +269,9 @@ def main():
 	elif args.diff:
 		com.compare_local_to_remote_copy()
 
+	# Doesn't work.
+	else:
+		sys.stdout.write(format_output('Use orite -h to see which options are available\n'))
 
 
 
