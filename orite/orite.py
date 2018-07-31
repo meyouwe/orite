@@ -87,6 +87,18 @@ class initialise():
 				self.initialise_config_file()
 
 
+
+	def config_file_sections(self):
+		"""Return the names of each section."""
+		config_file_test = open(self.config_file_name, 'r')
+		lines = config_file_test.readlines()
+		config_file_test.close()
+		for line in lines:
+			if line[0] == '[':
+				sys.stdout.write(line)
+
+
+
 	def copy_exclude_file(self):
 		'''Copy across the default exclude file as a starting point.
 		I have seen .gitignore used as an exclude file. This is an interesting idea but not there will be differences between these two.
@@ -213,13 +225,16 @@ class commands():
 
 
 def main():
-	'''FYI argparse documentation is here: https://docs.python.org/2/library/argparse.html'''
-	parser = argparse.ArgumentParser(prog='Snyc', description='A Python wrapper mainly around rsync with configuration files.')
+	'''FYI argparse documentation is here: https://docs.python.org/3.6/library/argparse.html
+	Note that nargs='?' = 0 or 1 and nargs='*' is 0 or more'''
+	parser = argparse.ArgumentParser(prog='orite', description='A Python wrapper mainly around rsync with configuration files.')
+	parser.add_argument("server", metavar='server', help="Config file section/server name", default='DEFAULT', nargs='?') 
+	parser.add_argument("-s", "--sections", help="Print the section of the config file to the screen", action="store_true")
 	parser.add_argument("-v", "--remote_to_local", help="Sync the remote folder to the local folder", action="store_true")
 	parser.add_argument("-^", "--local_to_remote", help="Sync the local folder to remote folder", action="store_true")
 	parser.add_argument("-d", "--dry_run", help="Do a dry run. This is the default", action="store_true", default='')
 	parser.add_argument("-r", "--for_real", help="Not a dry run, do it for real", action="store_true", default='')
-	parser.add_argument("-s", "--ssh", help="Login using SSH", action="store_true", default='')
+	parser.add_argument("--ssh", help="Login using SSH", action="store_true", default='')
 	parser.add_argument("--sftp", help="Login using SFTP", action="store_true", default='')
 
 	parser.add_argument("-C", "--initial_copy", help="Copy the local folder for use in diff.", action="store_true", default='')
@@ -231,47 +246,49 @@ def main():
 	init.config_file_exists()
 	init.exclude_file_exists()
 
-	if args.for_real:
-		dry_run = False
+	if args.sections:
+		init.config_file_sections()
 	else:
-		dry_run = True
+		if args.for_real:
+			dry_run = False
+		else:
+			dry_run = True
 
-	config = configparser.ConfigParser()
-	config.read(config_file_name)
+		config = configparser.ConfigParser()
+		config.read(config_file_name)
 
-	try:
-		config = config['DEFAULT']
-		username = config['username']
-		remote_server = config['remote_server']
-		local_path = config['path_to_local_folder']
-		remote_path = config['path_to_remote_folder']
-		
-		com = commands(username, remote_server, local_path, remote_path, dry_run)
+		config_section = args.server
+		try:
+			config = config[config_section]
+			username = config['username']
+			remote_server = config['remote_server']
+			local_path = config['path_to_local_folder']
+			remote_path = config['path_to_remote_folder']
+			
+			com = commands(username, remote_server, local_path, remote_path, dry_run)
 
-	except KeyError:
-		sys.stdout.write(format_output('A keyword is missing in your config file\n', '31'))
-		sys.stdout.write('Check the spelling or remove the config file altogther and re-initialise orite.\n')
-		sys.exit()
+		except KeyError:
+			sys.stdout.write(format_output('A keyword is missing in your config file\n', '31'))
+			sys.stdout.write('Check the spelling or remove the config file altogther and re-initialise orite.\n')
+			sys.exit()
 
 
-	if args.remote_to_local:
-		com.remote_to_local()
-	elif args.local_to_remote:
-		com.local_to_remote()
-	elif args.ssh:
-		com.ssh_into_remote()
-	elif args.sftp:
-		com.sftp_into_remote()
-	elif args.initial_copy:
-		com.copy_local()
-	elif args.remote_to_remote_copy:
-		com.sync_remote_copy()
-	elif args.diff:
-		com.compare_local_to_remote_copy()
-
-	# # Doesn't work.
-	# else:
-	# 	sys.stdout.write(format_output('Use orite -h to see which options are available\n'))
+		if args.remote_to_local:
+			com.remote_to_local()
+		elif args.local_to_remote:
+			com.local_to_remote()
+		elif args.ssh:
+			com.ssh_into_remote()
+		elif args.sftp:
+			com.sftp_into_remote()
+		elif args.initial_copy:
+			com.copy_local()
+		elif args.remote_to_remote_copy:
+			com.sync_remote_copy()
+		elif args.diff:
+			com.compare_local_to_remote_copy()
+		else:
+			sys.stdout.write(format_output('Use orite -h to see which options are available\n'))
 
 
 
