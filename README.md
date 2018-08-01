@@ -85,7 +85,7 @@ Run `orite -s` to get a print out of all the sections in your config file.
 
 Use orite with `watch` and have it watch a local directory for changes.
 
-    watch -d 'ls path-to-dir/css/ | orite css -^'
+    watch -d 'ls path-to-dir/css/ | orite CSS -^'
 
 If you are on a Mac and don't have watch in your CLI. Install it with [Homebrew](https://brew.sh/).
 
