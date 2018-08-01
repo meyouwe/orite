@@ -195,13 +195,12 @@ class commands():
 			local_copy_folder_path = local_copy_folder_path + self.local_folder_copy_name
 		else:
 			local_copy_folder_path = local_copy_folder_path + '/' + self.local_folder_copy_name
-			# local_copy_folder_path = '\ '.join(os.getcwd().split(' ')) + '/' + self.local_folder_copy_name
 		self.remote_to_local(local_path=local_copy_folder_path)
 
 
 	def compare_local_to_remote_copy(self):
 		'''Compare the local folder to the local remote copy.'''
-		command = 'diff -r -N  {o.local_path} {o.local_folder_copy_name}/ --exclude-from {o.exclude_file_name}'.format(o=self, **locals())
+		command = 'diff --recursive --new-file  {o.local_path} {o.local_folder_copy_name}/ --exclude-from {o.exclude_file_name}'.format(o=self, **locals())
 		sys.stdout.write(format_output('\nRunning this command: \n') + command + '\n\n')
 		return subprocess.call(command, shell=True)
 
