@@ -1,7 +1,7 @@
 # orite 
-## An opinionated rsync wrapper written in Python
+## A persistant rsync wrapper written in Python
 
-The purpose of orite is to synchronise folders and files between a remote and local server.
+Save a config file and then synchronise your remote and local folders and files. This project is an effort to centralise a sync approach, configure once, add options, and make it simple.
 
 To do this using orite run:
 
@@ -9,9 +9,8 @@ To do this using orite run:
 
 To do this using rsync run:
 
-    rsync --human-readable --info=flist --stats --archive --verbose --partial -ic --progress --dry-run /Users/username/Documents/websites/site_name/stack/folder/ username@127.68.551.54:/root/stack/folder --exclude-from="exclude.txt"
+    rsync --human-readable --info=flist --stats --archive --verbose --partial -ic --progress --dry-run /Users/username/Documents/websites/site_name/stack/folder/ username@127.68.551.54:/home/stack/folder --exclude-from="exclude.txt"
 
-This project is an effort to centralise a sync approach, configure once, add options, and make it simple.
 
 #### ōrite is a Māori word for ʻthe same’
 It's pronounced [like this](https://s3.amazonaws.com/media.tewhanake.maori.nz/dictionary/4802.mp3) rather than ‘oh-right’.
@@ -84,7 +83,7 @@ Run `orite -s` to get a print out of all the sections in your config file.
 
 ## Improvements/enhancements
 
-Use Orite with `watch` and have it watch a local directory for changes.
+Use orite with `watch` and have it watch a local directory for changes.
 
     watch -d 'ls path-to-dir/css/ | orite css -^'
 
@@ -92,6 +91,6 @@ If you are on a Mac and don't have watch in your CLI. Install it with [Homebrew]
 
 	brew install watch
 
-For a brief overview of watch us `watch -h` and read something like [this](http://www.linfo.org/watch.html)
+For a brief overview of watch use `watch -h` and read something like [this](http://www.linfo.org/watch.html)
 
 For more issues and suggested enhancements check out the issues tab.
