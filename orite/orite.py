@@ -226,12 +226,12 @@ class commands():
 
 def main():
 	'''FYI argparse documentation is here: https://docs.python.org/3.6/library/argparse.html
-	Note that nargs='?' = 0 or 1 and nargs='*' is 0 or more'''
+	Note that nargs='?' = 0 or 1 and nargs='*' is 0 or more arguments'''
 	parser = argparse.ArgumentParser(prog='orite', description='A Python wrapper mainly around rsync with configuration files.')
 	parser.add_argument("server", metavar='server', help="Config file section/server name", default='DEFAULT', nargs='?') 
 	parser.add_argument("-s", "--sections", help="Print the section of the config file to the screen", action="store_true")
 	parser.add_argument("-v", "--remote_to_local", help="Sync the remote folder to the local folder", action="store_true")
-	parser.add_argument("-^", "--local_to_remote", help="Sync the local folder to remote folder", action="store_true")
+	parser.add_argument("-^", "--local_to_remote", help="Sync the local folder to the remote folder", action="store_true")
 	parser.add_argument("-d", "--dry_run", help="Do a dry run. This is the default", action="store_true", default='')
 	parser.add_argument("-r", "--for_real", help="Not a dry run, do it for real", action="store_true", default='')
 	parser.add_argument("--ssh", help="Login using SSH", action="store_true", default='')
