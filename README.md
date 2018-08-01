@@ -75,13 +75,23 @@ Open the config file in your text editor. Add a section label at the bottom like
 
 `[CSS]`
 
-Then add the `path_to_local_folder = /path/` on the next line and `path_to_remote_folder = /path/` to the line after. If your CSS settings are on the same server then you don't need to add those details again. Needless to say that if they are on a different server than add those settings to this section too.
+Then add the `path_to_local_folder = /path/` on the next line and `path_to_remote_folder = /path/` to the line after. If your CSS settings are on the same server as your DEFAULT settings then you don't need to add those details again. Needless to say that if they are on a different server than add those settings to this section too.
 
 Add as many sections as you like.
 
 Run `orite -s` to get a print out of all the sections in your config file.
 
 
-## Improvements
+## Improvements/enhancements
 
-See issues for enhancements.
+Use Orite with `watch` and have it watch a local directory for changes.
+
+    watch -d 'ls path-to-dir/css/ | orite css -^'
+
+If you are on a Mac and don't have watch in your CLI. Install it with [Homebrew](https://brew.sh/).
+
+	brew install watch
+
+For a brief overview of watch us `watch -h` and read something like [this](http://www.linfo.org/watch.html)
+
+For more issues and suggested enhancements check out the issues tab.
