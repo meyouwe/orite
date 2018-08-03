@@ -41,7 +41,7 @@ If you don’t have pip.
 
 	sudo easy_install pip
 
-You will also be rquired to have Python 3 installed.
+You will also be required to have Python 3 installed.
 
 ## Update
 
