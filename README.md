@@ -36,6 +36,12 @@ This is where orite came in.
 Or download the orite folder and alias orite.py in your bash profile.
 
     alias orite='python3 path-to-orite-folder/orite.py'
+    
+If you don’t have pip.
+
+	sudo easy_install pip
+
+You will also be required to have Python 3 installed.
 
 ## Update
 
