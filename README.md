@@ -1,7 +1,7 @@
 # orite 
 ## A persistant rsync wrapper written in Python
 
-Save a config file and then synchronise your remote and local folders and files. This project is an effort to centralise a sync approach, configure once, add options, and make it simple.
+Save a config file and then synchronise your remote and local folders/files. This project is an effort to centralise a sync approach, configure once, add options, and make it simple.
 
 To do this using orite run:
 
@@ -66,7 +66,7 @@ The help menu can be seen using
 
 You can enable the config file to have more than one server or folder location. For example, my DEFAULT folder is my Django install and in a very separate location is my CSS folder. 
 
-`orite -^` will upload (with --dry-run set) to my DEFAULT setting, and 
+`orite -^` will upload (in dry-run mode) to my DEFAULT setting, and 
 
 `orite CSS -^` will upload to my CSS section settings. 
 
