@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="orite",
-    version="0.0.17",
+    version="0.0.18",
     author="Maarten Idema",
     author_email="maarten@mountdeluxe.com",
     description="orite - an opinionated Python rsync wrapper",

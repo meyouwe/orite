@@ -67,6 +67,26 @@ The help menu can be seen using
 
     orite -h
 
+This will output the following optional arguments:
+```
+  -h, --help            show this help message and exit
+  -s, --sections        Print the section of the config file to the screen
+  -v, --remote_to_local
+                        Download. Sync the remote folder to the local folder.
+                        Think of -v as a down arrow.
+  -^, --local_to_remote
+                        Upload. Sync the local folder to the remote folder.
+                        Think of -^ as an up arrow.
+  -d, --dry_run         Do a dry run. This is the default
+  -r, --for_real        Not a dry run, do it for real
+  --ssh                 Login using SSH
+  --sftp                Login using SFTP
+  -C, --initial_copy    Copy the local folder for use in diff.
+  -R, --remote_to_remote_copy
+                        Sync the remote folder to the local remote copy
+  -D, --diff            Compare the local folder to the local remote copy
+```
+
 
 ## Multiple servers – one config file
 
